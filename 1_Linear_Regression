@@ -1,0 +1,159 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "1_Linear Regression",
+      "provenance": [],
+      "collapsed_sections": [],
+      "authorship_tag": "ABX9TyO8IacRPluYVHA2pZkSCAcn",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/gibiee/study_AI/blob/master/1_Linear_Regression\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "DE_PxoAxokYv",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 197
+        },
+        "outputId": "2e9bb3af-8ced-4f94-8f88-6039b2b404b4"
+      },
+      "source": [
+        "# Gradient Descent (Linear Regression)\n",
+        "# (단일)선형회귀\n",
+        "import tensorflow as tf\n",
+        "\n",
+        "x_data = [1,2,3,4,5]\n",
+        "y_data = [1,2,3,4,5]\n",
+        "\n",
+        "W = tf.Variable(tf.random.normal([1]))\n",
+        "b = tf.Variable(tf.random.normal([1]))\n",
+        "\n",
+        "learning_rate = 0.01\n",
+        "for i in range(100) :\n",
+        "    with tf.GradientTape() as tape :\n",
+        "        hypothesis = W * x_data + b\n",
+        "        cost = tf.reduce_mean(tf.square(hypothesis - y_data))\n",
+        "\n",
+        "    W_grad, b_grad = tape.gradient(cost, [W, b])\n",
+        "    W.assign_sub(learning_rate * W_grad)\n",
+        "    b.assign_sub(learning_rate * b_grad)\n",
+        "\n",
+        "    if i % 10 == 0 :\n",
+        "        print(f\"i={i:2} W={W.numpy()[0]:7.4f} b={b.numpy()[0]:7.4f} cost={cost:9.6f}\")"
+      ],
+      "execution_count": 46,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "i= 0 W=-0.6625 b= 1.3962 cost=31.234222\n",
+            "i=10 W= 0.4586 b= 1.6449 cost= 0.647844\n",
+            "i=20 W= 0.5483 b= 1.6100 cost= 0.476505\n",
+            "i=30 W= 0.5682 b= 1.5577 cost= 0.444716\n",
+            "i=40 W= 0.5829 b= 1.5059 cost= 0.415588\n",
+            "i=50 W= 0.5968 b= 1.4558 cost= 0.388371\n",
+            "i=60 W= 0.6102 b= 1.4073 cost= 0.362937\n",
+            "i=70 W= 0.6232 b= 1.3604 cost= 0.339168\n",
+            "i=80 W= 0.6357 b= 1.3151 cost= 0.316955\n",
+            "i=90 W= 0.6479 b= 1.2713 cost= 0.296198\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "t2kcW85_p-dE",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 395
+        },
+        "outputId": "4798c99c-8111-48f4-8aa4-4b15c59af3e8"
+      },
+      "source": [
+        "# 다중선형회귀\n",
+        "import tensorflow as tf\n",
+        "import numpy as np\n",
+        "\n",
+        "data = np.array([[73, 80, 75, 152],\n",
+        "                 [93, 88, 93, 185],\n",
+        "                 [89, 91, 90, 180],\n",
+        "                 [96, 98, 100, 196],\n",
+        "                 [73, 66, 70, 142]], dtype=np.float32)\n",
+        "\n",
+        "X = data[:, :-1]    # 1~4행은 x값(입력)\n",
+        "y = data[:, [-1]]   # 마지막 5행은 y값(결과값)\n",
+        "\n",
+        "W = tf.Variable(tf.random.normal([3, 1]))\n",
+        "b = tf.Variable(tf.random.normal([1]))\n",
+        "\n",
+        "def hypothesis(X) :\n",
+        "    return tf.matmul(X, W) + b\n",
+        "\n",
+        "learning_rate = 0.000001\n",
+        "for i in range(1000+1) :\n",
+        "    with tf.GradientTape() as tape :\n",
+        "        cost = tf.reduce_mean(tf.square(hypothesis(X) - Y))\n",
+        "\n",
+        "    w_grad, b_grad = tape.gradient(cost, [W, b])\n",
+        "\n",
+        "    W.assign_sub(learning_rate * w_grad)\n",
+        "    b.assign_sub(learning_rate * b_grad)\n",
+        " \n",
+        "    if i % 50 == 0 :\n",
+        "        print(f\"{i:5} | {cost.numpy():10.4f}\")"
+      ],
+      "execution_count": 53,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "    0 | 58077.0234\n",
+            "   50 |  1464.6060\n",
+            "  100 |   836.3446\n",
+            "  150 |   829.2859\n",
+            "  200 |   829.1200\n",
+            "  250 |   829.0299\n",
+            "  300 |   828.9413\n",
+            "  350 |   828.8530\n",
+            "  400 |   828.7646\n",
+            "  450 |   828.6758\n",
+            "  500 |   828.5880\n",
+            "  550 |   828.4994\n",
+            "  600 |   828.4113\n",
+            "  650 |   828.3231\n",
+            "  700 |   828.2347\n",
+            "  750 |   828.1465\n",
+            "  800 |   828.0583\n",
+            "  850 |   827.9704\n",
+            "  900 |   827.8826\n",
+            "  950 |   827.7947\n",
+            " 1000 |   827.7065\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    }
+  ]
+}
