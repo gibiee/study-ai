@@ -12,7 +12,7 @@
 
 ### 딥러닝(Deep Learning)
 
-- Tensorflow / Keras
+- Keras
 
 |순서|파일명|설명|
 |:-:|-|-|
