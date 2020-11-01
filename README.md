@@ -22,6 +22,7 @@
 |4|IMDB_word index|IMDB 영화 리뷰 데이터를 긍정/부정 분류(Word Indexing 방식 사용)|
 |5|IMDB_TF Hub|IMDB 영화 리뷰 데이터를 긍정/부정 분류(TF Hub를 활용한 전이학습 사용)|
 |6|Cat vs Dog|고양이/개 이미지 이진(binary) 분류(classification)|
+|7|Auto_MPG|자동차 연비 예측하기: 회귀(regression)|
 
 - Pytorch
 
